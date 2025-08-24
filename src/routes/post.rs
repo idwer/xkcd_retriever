@@ -4,7 +4,7 @@ use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct XkcdId {
-    pub id: u16
+    pub id: u16,
 }
 
 #[derive(Deserialize)]
@@ -22,7 +22,8 @@ pub async fn handle_xkcd_json(data: web::Form<XkcdId>) -> HttpResponse {
         .await
         .unwrap();
 
-    HttpResponse::Ok()
-        .content_type("text/html")
-        .body(format!(r#"<html><body><img src={}></body></html>"#, xcd_resp.img))
+    HttpResponse::Ok().content_type("text/html").body(format!(
+        r#"<html><body><img src={}></body></html>"#,
+        xcd_resp.img
+    ))
 }

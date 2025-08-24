@@ -1,5 +1,5 @@
-use actix_web::{Error, HttpResponse};
 use actix_web::http::StatusCode;
+use actix_web::{Error, HttpResponse};
 
 pub async fn handle_404() -> Result<HttpResponse, Error> {
     Ok(HttpResponse::build(StatusCode::NOT_FOUND)

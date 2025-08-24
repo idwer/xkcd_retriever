@@ -1,6 +1,6 @@
-use actix_web::web;
 use actix_web::App;
 use actix_web::HttpServer;
+use actix_web::web;
 
 mod routes;
 
@@ -16,7 +16,7 @@ async fn main() -> std::io::Result<()> {
             .route("/form", web::get().to(get_form))
             .route("/xkcd", web::post().to(handle_xkcd_json))
     })
-        .bind(("127.0.0.1", 8080))?
-        .run()
-        .await
+    .bind(("127.0.0.1", 8080))?
+    .run()
+    .await
 }
