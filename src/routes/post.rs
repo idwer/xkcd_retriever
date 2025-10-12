@@ -13,7 +13,7 @@ pub struct XkcdResp {
 }
 
 pub async fn handle_xkcd_json(data: web::Form<XkcdId>) -> HttpResponse {
-    let xcd_resp = awc::Client::new()
+    let xkcd_resp = awc::Client::new()
         .get(format!("https://xkcd.com/{}/info.0.json", data.id))
         .send()
         .await
@@ -24,6 +24,6 @@ pub async fn handle_xkcd_json(data: web::Form<XkcdId>) -> HttpResponse {
 
     HttpResponse::Ok().content_type("text/html").body(format!(
         r#"<html><body><img src={}></body></html>"#,
-        xcd_resp.img
+        xkcd_resp.img
     ))
 }
