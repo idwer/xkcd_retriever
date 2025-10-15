@@ -6,6 +6,12 @@ import requests
 
 app = Flask(__name__)
 
+@app.errorhandler(404)
+
+
+def handle_http_404(e):
+    return render_template('404.html')
+
 
 @app.route('/xkcd', methods = ['POST'])
 def hello_xkcd():
