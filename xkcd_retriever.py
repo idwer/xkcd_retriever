@@ -26,7 +26,7 @@ def hello_xkcd():
             return f"""<img src={img_url}>"""
 
 
-@app.route('/')
+@app.route('/xkcd', methods=['GET'])
 def hello_world():
     return render_template('form.html')
 

@@ -13,7 +13,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
             .default_service(web::route().to(handle_404))
-            .route("/form", web::get().to(get_form))
+            .route("/xkcd", web::get().to(get_form))
             .route("/xkcd", web::post().to(handle_xkcd_json))
     })
     .bind(("127.0.0.1", 8080))?
