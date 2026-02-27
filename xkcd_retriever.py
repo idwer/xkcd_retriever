@@ -29,7 +29,7 @@ def hello_xkcd():
     img_url = xkcd_response.json().get('img')
 
     if xkcd_response.status_code == 200:
-            return f"""<img src={img_url}>"""
+        return render_template('xkcd_image.html', img_url=img_url)
 
 
 @app.route('/xkcd', methods=['GET'])
