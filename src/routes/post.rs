@@ -1,3 +1,4 @@
+use actix_web::http::StatusCode;
 use actix_web::HttpResponse;
 use actix_web::web;
 
@@ -21,20 +22,28 @@ pub async fn handle_xkcd_json(data: web::Form<XkcdId>) -> Result<HttpResponse, a
 
     match xkcd_com_resp {
         Ok(mut response) => {
-            if response.status().is_success() {
-                let xkcd_resp = response.json::<XkcdResp>()
-                                .await
-                                .unwrap();
-
-                Ok(HttpResponse::Ok()
-                   .content_type("text/html")
-                   .body(format!(r#"<html><body><img src={}></body></html>"#, xkcd_resp.img)))
-            } else {
-                Err(actix_web::error::ErrorInternalServerError("http 500"))
+            match response.status() {
+                StatusCode::OK => {
+                    let xkcd_resp = response.json::<XkcdResp>()
+                                    .await
+                                    .unwrap();
+                    return Ok(HttpResponse::Ok()
+                           .content_type("text/html")
+                           .body(format!(r#"<html><body><img src={}></body></html>"#, xkcd_resp.img)))
+                }
+                StatusCode::NOT_FOUND => {
+                    return Ok(HttpResponse::Ok()
+                           .content_type("text/html")
+                           .body(format!(r#"<html><body>XKCD {} not found<br><img src="https://img.freepik.com/free-vector/oops-404-error-with-broken-robot-concept-illustration_114360-5529.jpg"></html></body>"#, data.id)))
+                }
+                _ => return Err(actix_web::error::ErrorInternalServerError(response.status()))
             }
         }
-        _ => {
-            Err(actix_web::error::ErrorInternalServerError("http 500"))
+
+        Err(response_err) => {
+            eprintln!("Error retrieving XKCD JSON: {}", response_err);
+
+            return Err(actix_web::error::ErrorInternalServerError(response_err))
         }
     }
 }

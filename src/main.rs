@@ -10,13 +10,22 @@ use crate::routes::post::handle_xkcd_json;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| {
-        App::new()
-            .default_service(web::route().to(handle_404))
-            .route("/xkcd", web::get().to(get_form))
-            .route("/xkcd", web::post().to(handle_xkcd_json))
+    let actix_routes = HttpServer::new(|| {
+                App::new()
+                .default_service(web::route().to(handle_404))
+                .route("/xkcd", web::get().to(get_form))
+                .route("/xkcd", web::post().to(handle_xkcd_json))
     })
-    .bind(("127.0.0.1", 8080))?
-    .run()
-    .await
+    .bind(("127.0.0.1", 8080));
+
+    match actix_routes {
+        Ok(actix_server) => {
+            actix_server.run().await
+        }
+        Err(actix_err) => {
+            eprintln!("Logging actix_web error: {}", actix_err);
+
+            return Err(actix_err)
+        }
+    }
 }
