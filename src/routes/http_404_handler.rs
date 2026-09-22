@@ -1,7 +1,15 @@
 use actix_web::HttpResponse;
+use actix_web::Responder;
 
-pub async fn handle_404() -> HttpResponse {
+use askama::Template;
+
+use crate::templates::Http404Template;
+
+pub async fn handle_404() -> impl Responder {
+    let template = Http404Template {
+    };
+
     HttpResponse::NotFound()
-    .content_type("text/html; charset=utf-8")
-    .body(r#"<html><body><img src="https://img.freepik.com/free-vector/oops-404-error-with-broken-robot-concept-illustration_114360-5529.jpg"></html></body>"#.to_string())
+    .content_type("text/html")
+    .body(template.render().unwrap())
 }

@@ -3,6 +3,7 @@ use actix_web::HttpServer;
 use actix_web::web;
 
 mod routes;
+mod templates;
 
 use crate::routes::get::get_form;
 use crate::routes::http_404_handler::handle_404;

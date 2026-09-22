@@ -4,6 +4,11 @@ use actix_web::web;
 
 use serde::Deserialize;
 
+use askama::Template;
+
+use crate::templates::Http404XkcdTemplate;
+use crate::templates::XkcdImageTemplate;
+
 #[derive(Deserialize)]
 pub struct XkcdId {
     pub id: u16,
@@ -27,14 +32,23 @@ pub async fn handle_xkcd_json(form: web::Form<XkcdId>) -> Result<HttpResponse, a
                     let xkcd_resp = response.json::<XkcdResp>()
                                     .await
                                     .unwrap();
+
+                    let xkcd_img_template = XkcdImageTemplate {
+                        img_url: &xkcd_resp.img
+                    };
+
                     return Ok(HttpResponse::Ok()
-                           .content_type("text/html")
-                           .body(format!(r#"<html><body><img src={}></body></html>"#, xkcd_resp.img)))
+                              .content_type("text/html")
+                              .body(xkcd_img_template.render().unwrap()))
                 }
                 StatusCode::NOT_FOUND => {
+                    let xkcd_404_template = Http404XkcdTemplate {
+                        id: form.id
+                    };
+
                     return Ok(HttpResponse::NotFound()
-                           .content_type("text/html")
-                           .body(format!(r#"<html><body>XKCD {} not found<br><img src="https://img.freepik.com/free-vector/oops-404-error-with-broken-robot-concept-illustration_114360-5529.jpg"></html></body>"#, form.id)))
+                              .content_type("text/html")
+                              .body(xkcd_404_template.render().unwrap()))
                 }
                 _ => return Err(actix_web::error::ErrorInternalServerError(response.status()))
             }
