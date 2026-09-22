@@ -1,8 +1,7 @@
-use actix_web::http::StatusCode;
 use actix_web::HttpResponse;
 
 pub async fn get_form() -> HttpResponse {
-    HttpResponse::build(StatusCode::OK)
+    HttpResponse::Ok()
     .content_type("text/html")
     .body(
         r#"<html><body>
