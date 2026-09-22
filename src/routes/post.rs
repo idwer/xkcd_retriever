@@ -14,9 +14,9 @@ pub struct XkcdResp {
     pub img: String,
 }
 
-pub async fn handle_xkcd_json(data: web::Form<XkcdId>) -> Result<HttpResponse, actix_web::Error> {
+pub async fn handle_xkcd_json(form: web::Form<XkcdId>) -> Result<HttpResponse, actix_web::Error> {
     let xkcd_com_resp = awc::Client::new()
-                        .get(format!("https://xkcd.com/{}/info.0.json", data.id))
+                        .get(format!("https://xkcd.com/{}/info.0.json", form.id))
                         .send()
                         .await;
 
@@ -34,7 +34,7 @@ pub async fn handle_xkcd_json(data: web::Form<XkcdId>) -> Result<HttpResponse, a
                 StatusCode::NOT_FOUND => {
                     return Ok(HttpResponse::Ok()
                            .content_type("text/html")
-                           .body(format!(r#"<html><body>XKCD {} not found<br><img src="https://img.freepik.com/free-vector/oops-404-error-with-broken-robot-concept-illustration_114360-5529.jpg"></html></body>"#, data.id)))
+                           .body(format!(r#"<html><body>XKCD {} not found<br><img src="https://img.freepik.com/free-vector/oops-404-error-with-broken-robot-concept-illustration_114360-5529.jpg"></html></body>"#, form.id)))
                 }
                 _ => return Err(actix_web::error::ErrorInternalServerError(response.status()))
             }
