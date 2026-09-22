@@ -16,9 +16,9 @@ def handle_http_404(e):
 @app.route('/xkcd', methods = ['POST'])
 def hello_xkcd():
     req_form = request.form
-    tmp = req_form.getlist('xkcd_id')
+    form_id = req_form.getlist('id')
 
-    id = int(tmp[0])
+    id = int(form_id[0])
 
     url = f"https://xkcd.com/{id}/info.0.json"
     xkcd_response = requests.get(url)
