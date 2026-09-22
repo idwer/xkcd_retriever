@@ -9,6 +9,6 @@ pub async fn get_form() -> HttpResponse {
             <p>XKCD ID: <input name = "id" type = "number" value=200 /></p>
             <p><input type = "submit" value = "Submit" /></p>
             </form>
-            </html></body>"#,
+            </html></body>"#
     )
 }
