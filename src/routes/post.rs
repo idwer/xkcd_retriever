@@ -32,7 +32,7 @@ pub async fn handle_xkcd_json(form: web::Form<XkcdId>) -> Result<HttpResponse, a
                            .body(format!(r#"<html><body><img src={}></body></html>"#, xkcd_resp.img)))
                 }
                 StatusCode::NOT_FOUND => {
-                    return Ok(HttpResponse::Ok()
+                    return Ok(HttpResponse::NotFound()
                            .content_type("text/html")
                            .body(format!(r#"<html><body>XKCD {} not found<br><img src="https://img.freepik.com/free-vector/oops-404-error-with-broken-robot-concept-illustration_114360-5529.jpg"></html></body>"#, form.id)))
                 }
