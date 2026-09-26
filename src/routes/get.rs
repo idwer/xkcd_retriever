@@ -1,11 +1,10 @@
 use actix_web::HttpResponse;
-use actix_web::Responder;
 
 use askama::Template;
 
 use crate::templates::FormTemplate;
 
-pub async fn get_form() -> impl Responder {
+pub async fn get_form() -> HttpResponse {
     let template = FormTemplate {
     };
 

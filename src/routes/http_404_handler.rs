@@ -1,11 +1,10 @@
 use actix_web::HttpResponse;
-use actix_web::Responder;
 
 use askama::Template;
 
 use crate::templates::Http404Template;
 
-pub async fn handle_404() -> impl Responder {
+pub async fn handle_404() -> HttpResponse {
     let template = Http404Template {
     };
 
